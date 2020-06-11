@@ -484,6 +484,11 @@ func (r *AlertingRule) sendAlerts(ctx context.Context, ts time.Time, resendDelay
 	alerts := []*Alert{}
 	r.ForEachActiveAlert(func(alert *Alert) {
 		if alert.needsSending(ts, resendDelay) {
+			fmt.Printf("needsSending,ts:%v \n resendDelay:%v \n interval:%v \n alert: %v+ \n",
+				ts.String(),
+				resendDelay.String(),
+				interval.String(),
+				alert)
 			alert.LastSentAt = ts
 			// Allow for two Eval or Alertmanager send failures.
 			delta := resendDelay
@@ -494,6 +499,11 @@ func (r *AlertingRule) sendAlerts(ctx context.Context, ts time.Time, resendDelay
 			anew := *alert
 			alerts = append(alerts, &anew)
 		}
+		fmt.Printf("noneedsSending,ts:%v \n resendDelay:%v \n interval:%v \n alert: %v+ \n",
+			ts.String(),
+			resendDelay.String(),
+			interval.String(),
+			alert)
 	})
 	notifyFunc(ctx, r.vector.String(), alerts...)
 }

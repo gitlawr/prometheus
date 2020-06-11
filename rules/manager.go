@@ -15,6 +15,7 @@ package rules
 
 import (
 	"context"
+	"fmt"
 	html_template "html/template"
 	"math"
 	"net/url"
@@ -24,7 +25,7 @@ import (
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
-	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/model"
@@ -395,6 +396,7 @@ func (g *Group) run(ctx context.Context) {
 					g.metrics.iterationsScheduled.Add(float64(missed))
 				}
 				evalTimestamp = evalTimestamp.Add((missed + 1) * g.interval)
+				fmt.Printf("ggg iterate sendAlerts, %v", evalTimestamp.String())
 				iter()
 			}
 		}
